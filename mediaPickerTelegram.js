@@ -1,8 +1,8 @@
-import { AttachButton, Channel, useMessageInputContext } from 'stream-chat-react-native';
-import { ActionSheetProvider, useActionSheet } from '@expo/react-native-action-sheet';
+import { AttachButton, useMessageInputContext } from 'stream-chat-react-native';
+import { useActionSheet } from '@expo/react-native-action-sheet';
 import ImagePicker from 'react-native-image-crop-picker';
 
-const CustomAttachButton = () => {
+export const CustomAttachButton = () => {
     const { showActionSheetWithOptions } = useActionSheet();
     const { pickFile, uploadNewImage } = useMessageInputContext();
 
@@ -27,7 +27,6 @@ const CustomAttachButton = () => {
         );
 
     const onPress = () => {
-        // Same interface as https://facebook.github.io/react-native/docs/actionsheetios.html
         showActionSheetWithOptions(
             {
                 cancelButtonIndex: 3,
@@ -52,7 +51,6 @@ const CustomAttachButton = () => {
         );
     };
 
-    return <AttachButton handleOnPress={onPress} />;
+    return <AttachButton handleOnPress={onPress} />
 };
 
-module.exports = CustomAttachButton;

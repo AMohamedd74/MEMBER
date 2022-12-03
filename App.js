@@ -17,15 +17,15 @@ import {
 } from 'stream-chat-react-native';
 import { StreamChat } from 'stream-chat';
 import { chatApiKey,chatUserId } from './chatConfig';
-
+import {CustomAttachButton} from './mediaPickerTelegram';
 
 const ChannelScreen = props => {
     const { channel } = useAppContext();
 
     return (
-        <Channel channel={channel} AttachButton={CustomAttachButton}>
+        <Channel channel={channel} >
             <MessageList />
-            <MessageInput />
+            <MessageInput/>
         </Channel>
     );
 
