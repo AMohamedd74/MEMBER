@@ -1,21 +1,56 @@
 import { AttachButton, useMessageInputContext } from 'stream-chat-react-native';
-import { useActionSheet } from '@expo/react-native-action-sheet';
+import React, {useEffect, useState} from 'react';
+import {Image} from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 
 export const CustomAttachButton = () => {
-    const { showActionSheetWithOptions } = useActionSheet();
-    const { pickFile, uploadNewImage } = useMessageInputContext();
+    const { uploadNewImage } = useMessageInputContext();
+    const [photos, setAddPhotos] = useState(null);
+    const [photo, setAddphoto] = useState(null);
 
-    const pickImageFromGallery = () =>
+
+    const choosePhoto = () => {
         ImagePicker.openPicker({
             multiple: true,
-        }).then(images =>
-            images.forEach(image =>
-                uploadNewImage({
-                    uri: image.path,
-                }),
-            ),
+            waitAnimationEnd: false,
+            includeExif: true,
+            forceJpg: true,
+        })
+            .then((images) => {
+                setAddphoto(null);
+                setAddPhotos((lastPhotos) => {
+                    const imagesMap = images.map((i) => {
+                        return {
+                            uri: i.path,
+                            width: i.width,
+                            height: i.height,
+                            mime: i.mime,
+                        };
+                    });
+                    return [...lastPhotos, ...imagesMap];
+                });
+
+            })
+            .catch((e) => alert(e));
+    };
+
+    const renderImage = (image) => {
+        return (
+            <Image
+                style={{
+                    width: 185,
+                    height: 128,
+                    resizeMode: 'contain',
+                    marginTop: 1,
+                }}
+                source={image}
+            />
         );
+    };
+
+    const renderAsset = (image) => {
+        return renderImage(image);
+    };
 
     const pickImageFromCamera = () =>
         ImagePicker.openCamera({
@@ -27,30 +62,11 @@ export const CustomAttachButton = () => {
         );
 
     const onPress = () => {
-        showActionSheetWithOptions(
-            {
-                cancelButtonIndex: 3,
-                destructiveButtonIndex: 3,
-                options: ['Photo Library', 'Camera', 'Files', 'Cancel'],
-            },
-            buttonIndex => {
-                switch (buttonIndex) {
-                    case 0:
-                        pickImageFromGallery();
-                        break;
-                    case 1:
-                        pickImageFromCamera();
-                        break;
-                    case 2:
-                        pickFile();
-                        break;
-                    default:
-                        break;
-                }
-            },
-        );
+
     };
 
     return <AttachButton handleOnPress={onPress} />
 };
 
+export class choosePhoto {
+}
